@@ -1,10 +1,12 @@
 import logging
 import os
 import random
+import re
 
 from dotenv import load_dotenv
-from telegram import Update
-from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes, MessageHandler, filters
+from telegram import Update, InputContactMessageContent
+from telegram.ext import (ApplicationBuilder, CommandHandler, ContextTypes,
+                          MessageHandler, filters)
 
 load_dotenv()
 
@@ -19,24 +21,42 @@ logging.basicConfig(
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await context.bot.send_message(chat_id=update.effective_chat.id,
-                                   text="I'm a bot, please talk to me!")
+                                   text="Шо хочеш")
 
 
-async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if random.randint(1, 300) == 69:
+async def new_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    room_regex = re.compile(r'хто з \d{3}')
+    if room_regex.search(update.effective_message.text.lower()) is not None:
+        await context.bot.send_message(chat_id=update.effective_chat.id,
+                                       text='@kodein0slav, @Gwinbllade, @afekvova і @zemfirque (але останній лох)',
+                                       reply_to_message_id=update.effective_message.id)
+    elif random.randint(1, 300) == 69:
         await context.bot.send_message(chat_id=update.effective_chat.id,
                                        text=COPYPASTE,
                                        reply_to_message_id=update.effective_message.id)
+
+
+async def new_member(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    gif_url = ''
+    match random.randint(1, 2):
+        case 1: gif_url = 'asd'
+        case _: gif_url = 'asd'
+    await context.bot.send_document(chat_id=update.effective_chat.id,
+                                    document=gif_url,
+                                    reply_to_message_id=update.effective_message.id)
 
 
 if __name__ == '__main__':
     application = ApplicationBuilder().token(token=TOKEN).build()
 
     start_handler = CommandHandler('start', start)
-
-    echo_handler = MessageHandler(filters.TEXT & (~filters.COMMAND), echo)
+    new_message_handler = MessageHandler(filters=filters.TEXT & (~filters.COMMAND),
+                                         callback=new_message)
+    new_chat_member_handler = MessageHandler(filters=filters.StatusUpdate.NEW_CHAT_MEMBERS,
+                                             callback=new_member)
 
     application.add_handler(start_handler)
-    application.add_handler(echo_handler)
+    application.add_handler(new_message_handler)
+    # application.add_handler(new_chat_member_handler)
 
     application.run_polling()
