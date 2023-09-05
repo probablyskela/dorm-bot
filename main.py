@@ -25,12 +25,11 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def new_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    room_regex = re.compile(r'хто з \d{3}')
     if update.effective_message.text.lower() == 'ні':
         await context.bot.send_message(chat_id=update.effective_chat.id,
                                        text='hello',
                                        reply_to_message_id=update.effective_message.id)
-    if room_regex.search(update.effective_message.text.lower()) is not None:
+    elif re.compile(r'хто з \d{3}').search(update.effective_message.text.lower()) is not None:
         await context.bot.send_message(chat_id=update.effective_chat.id,
                                        text='@kodein0slav, @Gwinbllade, @afekvova і @zemfirque (але останній лох)',
                                        reply_to_message_id=update.effective_message.id)
@@ -38,7 +37,11 @@ async def new_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await context.bot.send_message(chat_id=update.effective_chat.id,
                                        text=COPYPASTE,
                                        reply_to_message_id=update.effective_message.id)
-
+    elif '@probablyskela' in update.effective_message.text.lower() is not None:
+        await context.bot.send_message(chat_id=update.effective_chat.id,
+                                       text='скела крутий',
+                                       reply_to_message_id=update.effective_message.id)
+    
 
 async def new_member(update: Update, context: ContextTypes.DEFAULT_TYPE):
     gif_url = ''
