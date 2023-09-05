@@ -2,9 +2,10 @@ import logging
 import os
 import random
 import re
+from datetime import datetime
 
 from dotenv import load_dotenv
-from telegram import Update, InputContactMessageContent
+from telegram import InputContactMessageContent, Update
 from telegram.ext import (ApplicationBuilder, CommandHandler, ContextTypes,
                           MessageHandler, filters)
 
@@ -18,6 +19,24 @@ logging.basicConfig(
     level=logging.INFO
 )
 
+# TODO: clear data from time to time shob pamyat` ne zasiralasya
+message_replies: dict[int, int]
+
+
+async def send_message_wrapper(update: Update,
+                               context: ContextTypes.DEFAULT_TYPE,
+                               text: str,
+                               save_reply_ids: bool = True):
+    if datetime.now().hour < 7 and '@' in text:
+        text = 'Негоже людей так рано тегати.'
+
+    message = await context.bot.send_message(chat_id=update.effective_chat.id,
+                                             text=text,
+                                             reply_to_message_id=update.effective_message.id)
+    if save_reply_ids:
+        message_replies[update.effective_message.id] = message_replies.get(
+            update.effective_message.id, []) + [message.id]
+
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await context.bot.send_message(chat_id=update.effective_chat.id,
@@ -25,22 +44,29 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def new_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if update.effective_message.text.lower() == 'ні':
-        await context.bot.send_message(chat_id=update.effective_chat.id,
-                                       text='hello',
-                                       reply_to_message_id=update.effective_message.id)
+    if update.edited_message is not None:
+        message_ids = message_replies.get(update.edited_message.id, [])
+        for id in message_ids:
+            await context.bot.edit_message_text(text='редачери гавноєди',
+                                                chat_id=update.effective_chat.id,
+                                                message_id=id)
+        message_replies.pop(update.edited_message.id)
+    elif update.effective_message.text.lower() == 'ні':
+        await send_message_wrapper(update=update,
+                                   context=context,
+                                   text='hello')
     elif re.compile(r'хто з \d{3}').search(update.effective_message.text.lower()) is not None:
-        await context.bot.send_message(chat_id=update.effective_chat.id,
-                                       text='@kodein0slav, @Gwinbllade, @afekvova і @zemfirque (але останній лох)',
-                                       reply_to_message_id=update.effective_message.id)
-    elif random.randint(1, 300) == 69:
-        await context.bot.send_message(chat_id=update.effective_chat.id,
-                                       text=COPYPASTE,
-                                       reply_to_message_id=update.effective_message.id)
+        await send_message_wrapper(update=update,
+                                   context=context,
+                                   text='@kodein0slav, @Gwinbllade, @afekvova і @zemfirque (але останній лох)')
+    elif random.randint(1, 200) == 69:
+        await send_message_wrapper(update=update,
+                                   context=context,
+                                   text=COPYPASTE)
     elif '@probablyskela' in update.effective_message.text.lower() is not None:
-        await context.bot.send_message(chat_id=update.effective_chat.id,
-                                       text='скела крутий',
-                                       reply_to_message_id=update.effective_message.id)
+        await send_message_wrapper(update=update,
+                                   context=context,
+                                   text='скела крутий')
 
 
 async def new_member(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -55,6 +81,8 @@ async def new_member(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 if __name__ == '__main__':
     application = ApplicationBuilder().token(token=TOKEN).build()
+
+    message_replies = dict()
 
     start_handler = CommandHandler('start', start)
     new_message_handler = MessageHandler(filters=filters.TEXT & (~filters.COMMAND),
