@@ -28,7 +28,7 @@ async def send_message_wrapper(update: Update,
                                text: str,
                                save_reply_ids: bool = True):
     if datetime.now().hour < 7 and '@' in text:
-        text = 'Негоже людей так рано тегати.'
+        text = 'Негоже людей в такий час тегати.'
 
     message = await context.bot.send_message(chat_id=update.effective_chat.id,
                                              text=text,
