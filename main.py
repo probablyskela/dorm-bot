@@ -41,13 +41,13 @@ async def new_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await context.bot.send_message(chat_id=update.effective_chat.id,
                                        text='скела крутий',
                                        reply_to_message_id=update.effective_message.id)
-    
+
 
 async def new_member(update: Update, context: ContextTypes.DEFAULT_TYPE):
     gif_url = ''
     match random.randint(1, 2):
-        case 1: gif_url = 'asd'
-        case _: gif_url = 'asd'
+        case 1: gif_url = 'https://tenor.com/suOYulGb5O6.gif'
+        case _: gif_url = 'https://tenor.com/o1lxLRIGvE0.gif'
     await context.bot.send_document(chat_id=update.effective_chat.id,
                                     document=gif_url,
                                     reply_to_message_id=update.effective_message.id)
@@ -64,6 +64,6 @@ if __name__ == '__main__':
 
     application.add_handler(start_handler)
     application.add_handler(new_message_handler)
-    # application.add_handler(new_chat_member_handler)
+    application.add_handler(new_chat_member_handler)
 
     application.run_polling()
