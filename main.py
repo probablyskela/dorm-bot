@@ -26,6 +26,10 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def new_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     room_regex = re.compile(r'хто з \d{3}')
+    if update.effective_message.text.lower() == 'ні':
+        await context.bot.send_message(chat_id=update.effective_chat.id,
+                                       text='hello',
+                                       reply_to_message_id=update.effective_message.id)
     if room_regex.search(update.effective_message.text.lower()) is not None:
         await context.bot.send_message(chat_id=update.effective_chat.id,
                                        text='@kodein0slav, @Gwinbllade, @afekvova і @zemfirque (але останній лох)',
