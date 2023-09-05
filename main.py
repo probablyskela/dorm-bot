@@ -50,7 +50,7 @@ async def new_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await context.bot.edit_message_text(text='редачери гавноєди',
                                                 chat_id=update.effective_chat.id,
                                                 message_id=id)
-        message_replies.pop(update.edited_message.id)
+        message_replies.pop(update.edited_message.id, None)
     elif update.effective_message.text.lower() == 'ні':
         await send_message_wrapper(update=update,
                                    context=context,
