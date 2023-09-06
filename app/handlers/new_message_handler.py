@@ -12,7 +12,7 @@ from app.utils import cache
 
 async def new_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.edited_message is not None:
-        bot_reply_id = await cache.cache.get(update.edited_message.id)
+        bot_reply_id = await cache.cache.get(f'{update.effective_chat.id}-{update.effective_message.id}')
         if bot_reply_id is not None:
             await context.bot.edit_message_text(text='редачери гавноєди',
                                                 chat_id=update.effective_chat.id,
@@ -42,8 +42,7 @@ async def new_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         try:
             response = openai.ChatCompletion.create(model='gpt-3.5-turbo',
                                                     messages=[{'role': 'user',
-                                                               'content': update.effective_message.text}],
-                                                    max_tokens=200)
+                                                               'content': update.effective_message.text}])
             await send_message_wrapper(update=update,
                                        context=context,
                                        text=response.choices[-1].message.content)

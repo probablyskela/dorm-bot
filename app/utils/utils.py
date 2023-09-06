@@ -20,4 +20,4 @@ async def send_message_wrapper(update: Update,
                                              text=text,
                                              reply_to_message_id=update.effective_message.id if reply else None)
     if save_reply_ids:
-        await cache.cache.set(update.effective_message.id, message.id, ex=48*60*60)
+        await cache.cache.set(f'{update.effective_chat.id}-{update.effective_message.id}', message.id, ex=48*60*60)

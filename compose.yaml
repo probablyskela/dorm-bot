@@ -5,9 +5,5 @@ services:
     image: redis:7-alpine
     volumes:
       - cache:/data
-    env_file:
-      - .env
-    ports:
-      - ${REDIS_PORT}:${REDIS_PORT}
 volumes:
   cache:
