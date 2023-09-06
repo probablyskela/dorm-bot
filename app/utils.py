@@ -21,11 +21,13 @@ def get_replies():
 def init_data():
     global message_replies
     message_replies = dict()
+    last_clear_time = 0
 
 
 async def send_message_wrapper(update: Update,
                                context: ContextTypes.DEFAULT_TYPE,
                                text: str,
+                               reply: bool = True,
                                save_reply_ids: bool = True):
     global last_clear_time
     global message_replies
@@ -37,7 +39,7 @@ async def send_message_wrapper(update: Update,
 
     message = await context.bot.send_message(chat_id=update.effective_chat.id,
                                              text=text,
-                                             reply_to_message_id=update.effective_message.id)
+                                             reply_to_message_id=update.effective_message.id if reply else None)
     if save_reply_ids:
         message_replies[update.effective_message.id] = ReplyInfo(reply_id=message.id,
                                                                  hour=hour)
