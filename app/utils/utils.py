@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime
 
 from telegram import Update
 from telegram.ext import ContextTypes
@@ -11,7 +11,10 @@ async def send_message_wrapper(update: Update,
                                text: str,
                                reply: bool = True,
                                save_reply_ids: bool = True):
-    hour = datetime.now().hour
+    month = datetime.datetime.now().month
+    timezone = datetime.timezone(datetime.timedelta(
+        hours=3 - (1 if 5 > month > 10 else 0)))
+    hour = datetime.datetime.now(timezone).hour
 
     if hour < 7 and '@' in text:
         text = 'Негоже людей в такий час тегати.'
