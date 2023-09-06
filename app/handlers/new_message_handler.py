@@ -38,17 +38,17 @@ async def new_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await context.bot.send_document(chat_id=update.effective_chat.id,
                                         document='https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExY3FtdWNoM25wYzFyMGY0eGt3MDYwZm5sNXgzNG40cTdlZTlxcmlvbCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/7FD6S5KE2KXauBATlK/giphy.gif',
                                         reply_to_message_id=update.effective_message.id)
-    elif '?' in update.effective_message.text and 10 < len(update.effective_message.text) < 150:
-        if random.randint(1, 2) == 1:
-            try:
-                response = openai.Completion.create(prompt=update.effective_message.text,
-                                                    engine='text-davinci-003',
-                                                    max_tokens=100)
-                await send_message_wrapper(update=update,
-                                        context=context,
-                                        text=response.choices[0].text)
-            except:
-                pass
+    elif update.effective_message.text.lower().startswith('бот,') and '?' in update.effective_message.text and 10 < len(update.effective_message.text):
+        try:
+            response = openai.ChatCompletion.create(model='gpt-3.5-turbo',
+                                                    messages=[{'role': 'user',
+                                                               'content': update.effective_message.text}],
+                                                    max_tokens=200)
+            await send_message_wrapper(update=update,
+                                       context=context,
+                                       text=response.choices[-1].message.content)
+        except:
+            pass
 
 new_message_handler = MessageHandler(filters=filters.TEXT & (~filters.COMMAND),
                                      callback=new_message)
