@@ -1,7 +1,9 @@
+language: python
+
 install: skip
 
 before_script:
   - env > .env
 
 script:
-  - docker compose up --build -d
+  - docker-compose up --build -d
