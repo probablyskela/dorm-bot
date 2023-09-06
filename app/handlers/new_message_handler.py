@@ -29,7 +29,7 @@ async def new_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif random.randint(1, 200) == 69:
         await send_message_wrapper(update=update,
                                    context=context,
-                                   text=settings.copypaste)
+                                   text=settings.COPYPASTE)
     elif '@probablyskela' in update.effective_message.text.lower() is not None:
         await send_message_wrapper(update=update,
                                    context=context,
