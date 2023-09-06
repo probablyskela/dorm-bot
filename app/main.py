@@ -1,6 +1,6 @@
-import openai
 import logging
 
+import openai
 from redis.asyncio.client import Redis
 from telegram.ext import ApplicationBuilder
 
