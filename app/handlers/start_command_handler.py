@@ -1,6 +1,6 @@
 from telegram import Update
 from telegram.ext import ContextTypes, CommandHandler
-from app.utils import send_message_wrapper
+from app.utils.utils import send_message_wrapper
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):

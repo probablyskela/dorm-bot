@@ -1,23 +1,22 @@
-import os
 import random
 import re
 
 from telegram import Update
 from telegram.ext import ContextTypes, MessageHandler, filters
 
-from app.utils import get_replies, send_message_wrapper
-
-COPYPASTE = os.getenv('COPYPASTE')
+from app.utils.utils import send_message_wrapper
+from app.utils.config import settings
+from app.utils import cache
 
 
 async def new_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.edited_message is not None:
-        reply_info = get_replies().get(update.edited_message.id, None)
-        if reply_info is not None:
+        bot_reply_id = await cache.cache.get(update.edited_message.id)
+        if bot_reply_id is not None:
             await context.bot.edit_message_text(text='редачери гавноєди',
                                                 chat_id=update.effective_chat.id,
-                                                message_id=reply_info.reply_id)
-            get_replies().pop(update.edited_message.id, None)
+                                                message_id=int(bot_reply_id))
+            await cache.cache.delete(update.edited_message.id)
     elif update.effective_message.text.lower() == 'ні':
         await send_message_wrapper(update=update,
                                    context=context,
@@ -29,7 +28,7 @@ async def new_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif random.randint(1, 200) == 69:
         await send_message_wrapper(update=update,
                                    context=context,
-                                   text=COPYPASTE)
+                                   text=settings.copypaste)
     elif '@probablyskela' in update.effective_message.text.lower() is not None:
         await send_message_wrapper(update=update,
                                    context=context,
