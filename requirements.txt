@@ -13,7 +13,6 @@ httpcore==0.17.3
 httpx==0.24.1
 idna==3.4
 multidict==6.0.4
-mypy-extensions==1.0.0
 openai==0.28.0
 pydantic==2.3.0
 pydantic-settings==2.0.3
@@ -23,7 +22,6 @@ python-telegram-bot==20.5
 redis==5.0.0
 requests==2.31.0
 sniffio==1.3.0
-tomli==2.0.1
 tqdm==4.66.1
 typing_extensions==4.7.1
 urllib3==2.0.4
