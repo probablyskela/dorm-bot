@@ -48,7 +48,9 @@ async def new_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
                                        context=context,
                                        text=response.choices[-1].message.content)
         except:
-            pass
+            await send_message_wrapper(update=update,
+                                       context=context,
+                                       text='@probablyskela, брат, гроші закінчилися, сам відповідай.')
 
 new_message_handler = MessageHandler(filters=filters.TEXT & (~filters.COMMAND),
                                      callback=new_message)
