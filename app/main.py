@@ -4,13 +4,13 @@ import os
 from dotenv import load_dotenv
 from telegram.ext import ApplicationBuilder
 
+from app.handlers import (new_member_handler, new_message_handler,
+                          start_command_handler)
 from app.utils import init_data
-from app.handlers import new_message_handler, new_member_handler, start_command_handler
 
 load_dotenv()
 
 TOKEN = os.getenv('TOKEN')
-COPYPASTE = os.getenv('COPYPASTE')
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',

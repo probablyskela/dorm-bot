@@ -1,6 +1,13 @@
+import os
+import random
+import re
+
 from telegram import Update
 from telegram.ext import ContextTypes, MessageHandler, filters
+
 from app.utils import get_replies, send_message_wrapper
+
+COPYPASTE = os.getenv('COPYPASTE')
 
 
 async def new_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
