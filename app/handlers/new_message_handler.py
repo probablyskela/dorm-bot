@@ -29,7 +29,7 @@ async def new_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif random.randint(1, 200) == 69:
         await send_message_wrapper(update=update,
                                    context=context,
-                                   text=settings.COPYPASTE)
+                                   text=settings.copypaste)
     elif '@probablyskela' in update.effective_message.text.lower() is not None:
         await send_message_wrapper(update=update,
                                    context=context,
@@ -38,7 +38,7 @@ async def new_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await context.bot.send_document(chat_id=update.effective_chat.id,
                                         document='https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExY3FtdWNoM25wYzFyMGY0eGt3MDYwZm5sNXgzNG40cTdlZTlxcmlvbCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/7FD6S5KE2KXauBATlK/giphy.gif',
                                         reply_to_message_id=update.effective_message.id)
-    elif update.effective_message.text.lower().startswith('бот,') and '?' in update.effective_message.text and 10 < len(update.effective_message.text):
+    elif update.effective_message.text.lower().startswith('бот,') and 10 < len(update.effective_message.text):
         try:
             response = openai.ChatCompletion.create(model='gpt-3.5-turbo',
                                                     messages=[{'role': 'user',

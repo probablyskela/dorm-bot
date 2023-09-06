@@ -16,15 +16,15 @@ logging.basicConfig(
 
 
 if __name__ == '__main__':
-    application = ApplicationBuilder().token(token=settings.TOKEN).build()
+    application = ApplicationBuilder().token(token=settings.token).build()
 
     application.add_handler(start_command_handler.start_handler)
     application.add_handler(new_message_handler.new_message_handler)
     application.add_handler(new_member_handler.new_member_handler)
 
-    cache.cache = Redis(host=settings.REDIS_HOST,
-                        port=settings.REDIS_PORT,
+    cache.cache = Redis(host=settings.redis_host,
+                        port=settings.redis_port,
                         decode_responses=True)
-    openai.api_key = settings.OPENAI_API_KEY
+    openai.api_key = settings.openai_api_key
 
     application.run_polling()
