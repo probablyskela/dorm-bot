@@ -34,7 +34,7 @@ async def new_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await send_message_wrapper(update=update,
                                    context=context,
                                    text='скела крутий')
-    elif re.search(r'заберіть прання', update.effective_message.text.lower()):
+    elif re.search(r'заберіть [прання|одяг]', update.effective_message.text.lower()):
         await context.bot.send_document(chat_id=update.effective_chat.id,
                                         document='https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExY3FtdWNoM25wYzFyMGY0eGt3MDYwZm5sNXgzNG40cTdlZTlxcmlvbCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/7FD6S5KE2KXauBATlK/giphy.gif',
                                         reply_to_message_id=update.effective_message.id)
